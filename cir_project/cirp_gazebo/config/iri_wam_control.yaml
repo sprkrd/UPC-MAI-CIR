@@ -1,0 +1,113 @@
+iri_wam:
+  # Publish all joint states ------------------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Effort Joint Trajectory Controller --------------------------------
+  iri_wam_controller:
+    type: "effort_controllers/JointTrajectoryController" 
+    joints:
+      - iri_wam_joint_1 
+      - iri_wam_joint_2
+      - iri_wam_joint_3
+      - iri_wam_joint_4
+      - iri_wam_joint_5
+      - iri_wam_joint_6
+      - iri_wam_joint_7
+    constraints:
+      goal_time: 100.0
+      stopped_velocity_tolerance: 0.02
+      iri_wam_joint_1:
+        goal: 0.02
+      iri_wam_joint_2:
+        goal: 0.02
+      iri_wam_joint_3:
+        goal: 0.02
+      iri_wam_joint_4:
+        goal: 0.02
+      iri_wam_joint_5:
+        goal: 0.02
+      iri_wam_joint_6:
+        goal: 0.02
+      iri_wam_joint_7:
+        goal: 0.02
+    gains:
+      iri_wam_joint_1: {p: 700.0, i: 100.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+      iri_wam_joint_2: {p: 5000.0, i: 100.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+      iri_wam_joint_3: {p: 1000.0, i: 100.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+      iri_wam_joint_4: {p: 1000.0, i: 100.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+      iri_wam_joint_5: {p: 50.0, i: 10.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+      iri_wam_joint_6: {p: 50.0, i: 10.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+      iri_wam_joint_7: {p: 50.0, i: 10.0, d: 0.0, i_clamp_min: -0.0, i_clamp_max: 0.0}
+    state_publish_rate: 50
+    action_monitor_rate: 30
+    stop_trajectory_duration: 0
+
+#  ## IMPORTANT
+#  # If you uncomment this Position controller, remember to comment the Effort one
+#  # The reason is because they share the same name
+#  # Position Joint Trajectory Controller ---------------------------------------
+  #  iri_wam_controller:
+  #    type: "position_controllers/JointTrajectoryController" 
+  #    joints:
+  #      - iri_wam_joint_1 
+  #      - iri_wam_joint_2
+  #      - iri_wam_joint_3
+  #      - iri_wam_joint_4
+  #      - iri_wam_joint_5
+  #      - iri_wam_joint_6
+  #      - iri_wam_joint_7
+
+  # Individual Joint Position Controllers ---------------------------------------
+  joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_1
+    pid: {p: 700.0, i: 100.0, d: 0.0}
+  joint2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_2
+    pid: {p: 5000.0, i: 100.0, d: 0.0}
+  joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_3
+    pid: {p: 1000.0, i: 100.0, d: 0.0}
+  joint4_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_4
+    pid: {p: 1000.0, i: 100.0, d: 0.0}
+  joint5_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_5
+    pid: {p: 50.0, i: 10.0, d: 0.0}
+  joint6_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_6
+    pid: {p: 50.0, i: 10.0, d: 0.0}
+  joint7_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iri_wam_joint_7
+    pid: {p: 50.0, i: 10.0, d: 0.0}
+
+  # Individual Joint Effort Controllers ---------------------------------------
+  joint1_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_1
+  joint2_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_2
+  joint3_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_3
+  joint4_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_4
+  joint5_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_5
+  joint6_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_6
+  joint7_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: iri_wam_joint_7

@@ -1,0 +1,13 @@
+material Number/Three/Blue
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture number3.png
+      }
+    }
+  }
+}

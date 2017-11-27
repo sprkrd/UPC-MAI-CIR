@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="gripper" params="prefix parent">
+
+    <!--<link name="${prefix}_gripper">-->
+      <!--<visual>-->
+        <!--<geometry>-->
+          <!--<sphere radius="0.04"/>-->
+        <!--</geometry>-->
+      <!--</visual>-->
+    <!--</link>-->
+
+    <!--<joint name="${prefix}_gripper_j" type="fixed">-->
+      <!--<parent link="${parent}" />-->
+      <!--<child link="${prefix}_gripper" />-->
+      <!--<origin xyz="0 0 0.04" rpy="0 0 0" />-->
+    <!--</joint>-->
+
+    <link name="${prefix}_gripper_tcp" />
+    
+    <joint name="${prefix}_gripper_tcp_j" type="fixed" >
+      <parent link="${parent}" />
+      <child link="${prefix}_gripper_tcp" />
+      <origin xyz="0.0 0.0 0.115" rpy="0 0 0" />
+    </joint>
+
+    <gazebo>
+      <plugin filename="libgz_gripper_plugin.so" name="gripper_plugin">
+        <gripper_link>${prefix}_link_7</gripper_link>
+        <gripper_tf>${prefix}_gripper_tcp</gripper_tf>
+      </plugin>
+    </gazebo>
+
+    <gazebo reference="${prefix}_gripper">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
+

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot name="iri_wam" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+  <!-- Set up definitions of parts of the robot body -->  
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_base.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_1.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_2.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_3.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_4.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_5.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_6.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_7.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_tcp.urdf.xacro" />
+  <xacro:include filename="$(find cirp_wam_description)/xacro/kinect.urdf.xacro" />
+  <xacro:include filename="$(find cirp_wam_description)/xacro/gripper.urdf.xacro" />
+  
+  <!-- The first use of a macro. This one was defined in wambase.urdf.xacro above.
+       A macro like this will expand to a set of link and joint definitions, and to additional
+       Gazebo-related extensions (sensor plugins, etc).  The macro takes an argument, name, 
+       that equals "wam", and uses it to generate names for its component links and joints 
+       (e.g., wam_link_base).  The included origin block is also an argument to the macro.  By convention, 
+       the origin block defines where the component is w.r.t its parent (in this case the parent 
+       is the world frame). For more, see http://www.ros.org/wiki/xacro -->
+  
+  <xacro:property name="robot_name" value="iri_wam"/>
+  <xacro:property name="JointInterface" value="hardware_interface/EffortJointInterface"/>
+  <!-- <xacro:property name="JointInterface" value="PositionJointInterface"/> -->
+
+  <!-- This will attach the robot to the world link -->
+  <link name="world"/>
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child  link="${robot_name}_link_footprint"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <xacro:wambase prefix="${robot_name}"/>
+  <xacro:wam1    prefix="${robot_name}" parent="${robot_name}_link_base" controller="${JointInterface}"/>
+  <xacro:wam2    prefix="${robot_name}" parent="${robot_name}_link_1" controller="${JointInterface}"/>
+  <xacro:wam3    prefix="${robot_name}" parent="${robot_name}_link_2" controller="${JointInterface}"/>
+  <xacro:wam4    prefix="${robot_name}" parent="${robot_name}_link_3" controller="${JointInterface}"/>
+  <xacro:wam5    prefix="${robot_name}" parent="${robot_name}_link_4" controller="${JointInterface}"/>
+  <xacro:wam6    prefix="${robot_name}" parent="${robot_name}_link_5" controller="${JointInterface}"/>
+  <xacro:wam7    prefix="${robot_name}" parent="${robot_name}_link_6" controller="${JointInterface}"/>
+  <xacro:wamtcp  prefix="${robot_name}" parent="${robot_name}_link_7"/>
+  <xacro:gripper prefix="${robot_name}" parent="${robot_name}_link_tcp"/>
+  <xacro:kinect                         parent="${robot_name}_link_base" />
+
+  <!-- Not used but exposed here for educational purposes -->
+  <!-- <xacro:kinect prefix="${robot_name}" parent="${robot_name}_link_tcp"/> -->
+
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/${robot_name}</robotNamespace>
+      <!--<robotParam>/gazebo/iri_wam_picker/robot_description</robotParam>-->
+      <!--<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>-->
+      <!--<controlPeriod>0.002</controlPeriod>-->
+      <eStopTopic>e_stop</eStopTopic>
+    </plugin>
+  </gazebo>
+
+</robot>
+

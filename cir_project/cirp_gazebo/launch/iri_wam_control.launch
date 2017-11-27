@@ -1,0 +1,40 @@
+<launch>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find cirp_gazebo)/config/iri_wam_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/iri_wam" args="--shutdown-timeout 1
+                                            joint_state_controller
+                                            iri_wam_controller" /> 
+
+  <!--<node name="effort_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"-->
+        <!--output="screen" ns="/iri_wam" args="-stopped -shutdown-timeout 1-->
+                                            <!--joint1_effort_controller-->
+                                            <!--joint2_effort_controller-->
+                                            <!--joint3_effort_controller-->
+                                            <!--joint4_effort_controller-->
+                                            <!--joint5_effort_controller-->
+                                            <!--joint6_effort_controller-->
+                                            <!--joint7_effort_controller" />-->
+
+  <!--<node name="position_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"-->
+        <!--output="screen" ns="/iri_wam" args="-stopped -shutdown-timeout 1-->
+                                            <!--joint1_position_controller-->
+                                            <!--joint2_position_controller-->
+                                            <!--joint3_position_controller-->
+                                            <!--joint4_position_controller-->
+                                            <!--joint5_position_controller-->
+                                            <!--joint6_position_controller-->
+                                            <!--joint7_position_controller" />-->
+
+  <node name="joint_states_relay" pkg="topic_tools" type="relay" args="/iri_wam/joint_states /joint_states" />
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="true" output="screen">
+    <!-- <remap from="/joint_states" to="/iri_wam/joint_states" /> -->
+  </node>
+
+</launch>
