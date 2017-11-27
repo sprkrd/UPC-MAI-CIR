@@ -1,0 +1,89 @@
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+Environment class
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+
+
+def get_current_state()
+	returns list of integers 0..k [c1, c2, c3, arm, lastL, lastR]
+
+def execute_action(action)
+	action in ["pick1", "pick2", "pick3", "putL", "putR"]
+	returns get_current_state()
+
+def warn()
+	called when the user should be warned (or shocked with a minor electical current)
+
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+User class
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+
+
+def get_next_action()
+	returns action in ["pick1", "pick2", "pick3", "putL", "putR"]
+
+
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+IRL script (main loop)
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+
+env = Environment(...)
+
+user = User(...)
+
+s := env.get_current_state()
+
+last_a := null
+
+while (True):
+	
+	a := user.get_next_action()
+
+	if warnable_state_action_pair(s, a, last_a):
+
+		env.warn()
+		self.warned_last = True
+
+	else:
+
+		s := env.execute_action(a)
+		self.warned_last = False
+
+	last_a := a
+
+
+def warnable_state_action_pair(s, a, last_a):
+	returns boolean
+	False if a == last_a
+
+def train(trajectory):
+	trajectory: list of [s1, a1, s2, a2, ... sn, an]
+	where si is a observation (list of integers 0..k [c1, c2, c3, arm, lastL, lastR])
+	and ai an action in ["pick1", "pick2", "pick3", "putL", "putR"]
+
+
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+IRL script (main loop)
+- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - 
+
+if c1 == c3, putL: 10
+
+if arm == red, putL: 8
+
+if arm == green, putR: 6
+
+if arm == blue, putR: 4
+
+if arm == red and lastL == green, putL: -20
+
+if arm == green and (c1 == green or c2 == green or c3 == green), putR: -20
+
+
+
