@@ -43,10 +43,14 @@ def handle_joints_move(req):
     action_client.wait_for_server()
     # Send goal
     action_client.send_goal(goal)
-    rospy.sleep(duration)
+    finished = action_client.wait_for_result(rospy.Duration(duration*1.1))
+    if not finished:
+        action_client.cancel_all_goals()
+    success = 1
   except rospy.ROSInterruptException as e:
     print(e)
-  return QueryJointsMovementResponse(success=1)
+    success = 0
+  return QueryJointsMovementResponse(success=success)
 
 
 ################################
