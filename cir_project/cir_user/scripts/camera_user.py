@@ -32,7 +32,7 @@ def talker():
         if action == "putM": # Invalid action
             action = ""
         return UserActionResponse(action=action)
-    IP = "192.168.43.137"
+    IP = "192.168.101.72"
     x_coord = 0
     rospy.init_node('talker', anonymous=True)
     rospy.Service("poll_action", UserAction, service_callback)
