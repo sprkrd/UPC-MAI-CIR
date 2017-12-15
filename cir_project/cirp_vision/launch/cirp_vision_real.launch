@@ -3,31 +3,55 @@
   <!-- Arguments -->
   <arg name="rgb_topic" default="/camera/rgb/image_color"/>
   <arg name="points_topic" default="/camera/depth_registered/points"/>
-  <arg name="output" default="screen" />
+  <arg name="output" default="log" />
+  <arg name="freenect_driver" default="true" />
+  <arg name="camera_tf" default="true" />
+  <arg name="rqt_gui" default="true" />
+  <arg name="transform_points" default="false"/>
+
+  <include file="$(find freenect_launch)/launch/freenect.launch" if="$(arg freenect_driver)">
+    <arg name="depth_registration" default="true" />
+  </include>
+
+  <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" if="$(arg rqt_gui)">
+  </node>
+
+  <node name="tf_camera_gui" pkg="cirp_vision" type="tf_camera_gui.py" output="$(arg output)" if="$(arg camera_tf)">
+    <param name="parent_frame" value="iri_wam_link_base"/>
+    <param name="child_frame" value="camera_link"/>
+    <param name="x" value="0.565"/>
+    <param name="y" value="-0.072"/>
+    <param name="z" value="0.736"/>
+    <param name="roll" value="0"/>
+    <param name="pitch" value="1.451"/>
+    <param name="yaw" value="3.142"/>
+  </node>
 
   <node name="segmenter_scene" pkg="cirp_vision" type="cirp_vision" output="$(arg output)" >
-    <param name="blue_h" value="112" />
-    <param name="blue_s" value="183" />
-    <param name="blue_v" value="128" />
-    <param name="green_h" value="59" />
-    <param name="green_s" value="116" />
-    <param name="green_v" value="136" />
-    <param name="yellow_h" value="28" />
-    <param name="yellow_s" value="231" />
-    <param name="yellow_v" value="206" />
-    <param name="red_h" value="172" />
-    <param name="red_s" value="196" />
-    <param name="red_v" value="164" />
+    <param name="blue_h" value="115" />
+    <param name="blue_s" value="119" />
+    <param name="blue_v" value="137" />
+    <param name="green_h" value="53" />
+    <param name="green_s" value="89" />
+    <param name="green_v" value="179" />
+    <!--<param name="yellow_h" value="28" />-->
+    <!--<param name="yellow_s" value="231" />-->
+    <!--<param name="yellow_v" value="206" />-->
+    <param name="red_h" value="174" />
+    <param name="red_s" value="211" />
+    <param name="red_v" value="183" />
     <param name="h_tolerance" value="10" />
-    <param name="s_tolerance" value="100" />
-    <param name="v_tolerance" value="255" />
-    <param name="crop_left" value="50" />
-    <param name="crop_top" value="20" />
-    <param name="crop_right" value="50" />
-    <param name="crop_bottom" value="50" />
-    <param name="frame_tgt" value=""/>
-    <!--<param name="frame_tgt" value="iri_wam_link_base"/>-->
+    <param name="s_tolerance" value="70" />
+    <param name="v_tolerance" value="100" />
+    <param name="crop_left" value="0" />
+    <param name="crop_top" value="197" />
+    <param name="crop_right" value="0" />
+    <param name="crop_bottom" value="0" />
+    <param unless="$(arg transform_points)" name="frame_tgt" value=""/>
+    <param if="$(arg transform_points)" name="frame_tgt" value="iri_wam_link_base"/>
     <param name="min_area" value="700"/>
+    <param name="fg_erosion_r" value="1"/>
+    <param name="bg_erosion_r" value="1"/>
     <remap from="~img_in/image_raw" to="$(arg rgb_topic)" />
     <remap from="~points" to="$(arg points_topic)" />
   </node>

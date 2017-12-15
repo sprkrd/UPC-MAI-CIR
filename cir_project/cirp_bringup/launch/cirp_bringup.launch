@@ -1,0 +1,23 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="output" default="log" />
+  <arg name="rqt_gui" default="true" />
+
+  <!--<node name="environment" pkg="cirp_environment" type="environment.py" />-->
+
+  <group ns="iri_wam">
+    <node name="iri_wam_generic_pickorplace" pkg="iri_wam_generic_pickorplace" type="iri_wam_generic_pickorplace" output="screen">
+      <remap from="~/get_robot_ik" to="iri_wam_gripper_ik/get_wam_ik"/>
+      <remap from="~/wam_joints_pose" to="iri_wam_controller/joints_move"/>
+      <remap from="~/close_gripper" to="tool_close_action"/>
+      <remap from="~/open_gripper" to="tool_open_action"/>
+    </node>
+  </group>
+
+  <include file="$(find cirp_vision)/launch/cirp_vision_real.launch">
+    <arg name="output" value="$(arg output)" />
+    <arg name="rqt_gui" value="$(arg rqt_gui)" />
+    <arg name="transform_points" value="true" />
+  </include>
+
+</launch>

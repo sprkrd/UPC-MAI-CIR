@@ -1,4 +1,4 @@
-
+#!/usr/bin/python
 import roslib
 import rospy
 import actionlib
@@ -19,14 +19,16 @@ class EnvironmentError(Exception):
 
 class Environment:
 
-    REST_POINT = [0.195, 0.000, 0.055]
-    LEFT_CTN_POINT = [-0.125, -0.65, -0.2]
-    RIGHT_CTN_POINT = [-0.125, 0.65, -0.2]
+    REST_POINT = [0.22, 0.000, 0.06]
+    RIGHT_CTN_POINT = [0.087, 0.531, -0.07] # REAL
+    LEFT_CTN_POINT = [0.126, -0.490, -0.07] # REAL
+    # LEFT_CTN_POINT = [-0.125, -0.65, -0.2] # SIMULATION
+    # RIGHT_CTN_POINT = [-0.125, 0.65, -0.2] # SIMULATION
 
     def __init__(self):
         rospy.init_node("environment")
-        self._th1 = rospy.get_param("~/th1", default=-0.175)
-        self._th2 = rospy.get_param("~/th2", default=0.175)
+        self._th1 = rospy.get_param("~/th1", default=-0.2)
+        self._th2 = rospy.get_param("~/th2", default=0.2)
         self._on_table = None
         self._holding = None
         self._last_r = None
@@ -59,8 +61,9 @@ class Environment:
             rospy.loginfo("Waiting for action server...")
             action_client.wait_for_server()
             goal = PickOrPlaceGoal()
-            goal.ini_point = position[0:2] + [position[2]+0.2]
-            goal.grasp_point = position[0:2] + [position[2]-0.01]
+            goal.ini_point = position[0:2] + [position[2]+0.1]
+            goal.grasp_point = position # REAL
+            # goal.grasp_point = position[0:2] + [position[2]-0.005] # SIMULATION
             goal.end_point = Environment.REST_POINT
             goal.ini_EF_rpy = [pi, 0, pi]
             goal.end_EF_rpy = [pi, 0, pi]
@@ -88,7 +91,7 @@ class Environment:
             else:
                 goal.ini_point = list(Environment.RIGHT_CTN_POINT)
                 goal.grasp_point = Environment.RIGHT_CTN_POINT
-            goal.ini_point[-1] += 0.2
+            # goal.ini_point[-1] += 0.2
             goal.end_point = Environment.REST_POINT
             goal.ini_EF_rpy = [pi, 0, pi]
             goal.end_EF_rpy = [pi, 0, pi]
@@ -133,31 +136,31 @@ class Environment:
 if __name__ == "__main__":
     env = Environment()
     rospy.sleep(rospy.Duration(1.0))
-    env.execute_action("pickM")
-    env.execute_action("putL")
-    env.execute_action("pickL")
-    env.execute_action("putR")
-    env.execute_action("pickR")
-    env.execute_action("putR")
-    # quit = False
-    # while not quit:
-        # cmd = int(raw_input("Select command: (1) query_state; "
-            # "(2) pickL; (3) pickM; (4) pickR; (5) putL; (6) putR; (7) exit: "))
-        # if cmd == 1:
-            # print(env.get_current_state())
-        # elif cmd == 2:
-            # print(env.execute_action("pickL"))
-        # elif cmd == 3:
-            # print(env.execute_action("pickM"))
-        # elif cmd == 4:
-            # print(env.execute_action("pickR"))
-        # elif cmd == 5:
-            # print(env.execute_action("putL"))
-        # elif cmd == 6:
-            # print(env.execute_action("putR"))
-        # elif cmd == 7:
-            # print("Shutting down...")
-            # quit = True
-        # else:
-            # rospy.logerr("Unknown cmd: " + str(cmd))
+    # env.execute_action("pickM")
+    # env.execute_action("putL")
+    # env.execute_action("pickL")
+    # env.execute_action("putR")
+    # env.execute_action("pickR")
+    # env.execute_action("putR")
+    quit = False
+    while not quit:
+        cmd = int(raw_input("Select command: (1) query_state; "
+            "(2) pickL; (3) pickM; (4) pickR; (5) putL; (6) putR; (7) exit: "))
+        if cmd == 1:
+            print(env.get_current_state())
+        elif cmd == 2:
+            print(env.execute_action("pickL"))
+        elif cmd == 3:
+            print(env.execute_action("pickM"))
+        elif cmd == 4:
+            print(env.execute_action("pickR"))
+        elif cmd == 5:
+            print(env.execute_action("putL"))
+        elif cmd == 6:
+            print(env.execute_action("putR"))
+        elif cmd == 7:
+            print("Shutting down...")
+            quit = True
+        else:
+            rospy.logerr("Unknown cmd: " + str(cmd))
 
