@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>cir_user</name>
+  <name>cirp_user</name>
   <version>0.0.0</version>
-  <description>The cir_tet package</description>
+  <description>The cirp_user package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

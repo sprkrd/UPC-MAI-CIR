@@ -1,0 +1,36 @@
+<launch>
+
+  <!-- Arguments -->
+  <arg name="rgb_topic" default="/camera/rgb/image_color"/>
+  <arg name="points_topic" default="/camera/depth_registered/points"/>
+  <arg name="output" default="screen" />
+
+  <node name="segmenter_scene" pkg="cirp_vision" type="cirp_vision" output="$(arg output)" >
+    <param name="blue_h" value="112" />
+    <param name="blue_s" value="183" />
+    <param name="blue_v" value="128" />
+    <param name="green_h" value="59" />
+    <param name="green_s" value="116" />
+    <param name="green_v" value="136" />
+    <param name="yellow_h" value="28" />
+    <param name="yellow_s" value="231" />
+    <param name="yellow_v" value="206" />
+    <param name="red_h" value="172" />
+    <param name="red_s" value="196" />
+    <param name="red_v" value="164" />
+    <param name="h_tolerance" value="10" />
+    <param name="s_tolerance" value="100" />
+    <param name="v_tolerance" value="255" />
+    <param name="crop_left" value="50" />
+    <param name="crop_top" value="20" />
+    <param name="crop_right" value="50" />
+    <param name="crop_bottom" value="50" />
+    <param name="frame_tgt" value=""/>
+    <!--<param name="frame_tgt" value="iri_wam_link_base"/>-->
+    <param name="min_area" value="700"/>
+    <remap from="~img_in/image_raw" to="$(arg rgb_topic)" />
+    <remap from="~points" to="$(arg points_topic)" />
+  </node>
+
+</launch>
+
