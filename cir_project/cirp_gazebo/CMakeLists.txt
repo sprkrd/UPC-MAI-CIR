@@ -7,10 +7,10 @@ project(cirp_gazebo)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  gazebo_ros
-  gz_gripper_plugin
-)
+#find_package(catkin REQUIRED COMPONENTS
+  #gazebo_ros
+  #gz_gripper_plugin
+#)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -104,7 +104,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES cirp_gazebo
-#  CATKIN_DEPENDS gazebo_ros gz_gripper_plugin
+  CATKIN_DEPENDS gazebo_ros gz_gripper_plugin
 #  DEPENDS system_lib
 )
 
