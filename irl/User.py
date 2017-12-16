@@ -3,14 +3,15 @@ import numpy as np
 class User:
 
 	# actions:
-	actions = ["pick1", "pick2", "pick3", "putL", "putR"]
+	actions = ["pickL", "pickM", "pickR", "putL", "putR"]
+
 
 	def __init__(self, env):
 		# TODO
 		self.env = env
 		self.rewards = env.get_real_reward_function()
 
-	def get_next_action(self):
+	def poll_next_action(self):
 		return self.actions[np.random.randint(0, 5)]
 
 	def get_random_action(self):
