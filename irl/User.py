@@ -3,7 +3,8 @@ import numpy as np
 class User:
 
 	# actions:
-	actions = ["pick1", "pick2", "pick3", "putL", "putR"]
+	actions = ["pickL", "pickM", "pickR", "putL", "putR"]
+
 
 	def __init__(self, env):
 		# TODO

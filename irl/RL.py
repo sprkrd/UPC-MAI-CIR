@@ -6,7 +6,7 @@ from collections import Counter
 
 c1, c2, c3, arm, last_l, last_r = list(range(0, 6))
 empty, red, blue, green = list(range(0, 4))
-actions = ["pick1", "pick2", "pick3", "putL", "putR"]
+actions = ["pickL", "pickM", "pickR", "putL", "putR"]
 
 
 def updateQ(Q, s, a, r, sn, gamma, alpha=0.05):

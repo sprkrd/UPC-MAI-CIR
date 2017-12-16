@@ -12,7 +12,7 @@ c1, c2, c3, arm, last_l, last_r = list(range(0, 6))
 empty, red, blue, green = list(range(0, 4))
 
 # actions:
-actions = ["pick1", "pick2", "pick3", "putL", "putR"]
+actions = ["pickL", "pickM", "pickR", "putL", "putR"]
 
 
 def is_warnable(current_state, next_action, last_action, warned_last_step):
@@ -47,11 +47,10 @@ def reward_estimate_from_trajectory(trajectory):
 # # # # # # # # # #
 
 
-
 print('Getting state action values from optimal policy with some random exploration')
-Q = train_Q(iterations=200000, traj_len=100, alpha_min=0.5)
-print(Q[1, 2, 3, 0, :, 0, :])
-np.save('Qs', np.copy(Q))
+# Q = train_Q(iterations=200000, traj_len=100, alpha_min=0.5)
+# print(Q[1, 2, 3, 0, :, 0, :])
+# np.save('Qs', np.copy(Q))
 Q = np.load('Qs.npy')
 
 # print(Q[1, 2, 3, 0, :, 0, :])
@@ -66,6 +65,8 @@ Q = np.load('Qs.npy')
 env = Environment()
 env.reset()
 user = User(env)
+
+env.warn('Welcome!')
 
 
 current_state = env.get_current_state()
