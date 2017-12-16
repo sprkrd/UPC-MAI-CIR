@@ -19,9 +19,9 @@ class CameraUserServer:
         rospy.init_node("talker")
         rospy.Service("poll_action", UserAction, self._action_cb)
         self._next_action = None
-        self._tracker = EyeTribe()
-        self._tracker.connect(IP)
-        self._tracker.pullmode()
+        # self._tracker = EyeTribe()
+        # self._tracker.connect(IP)
+        # self._tracker.pullmode()
 
     def _action_cb(self, req):
         rate = rospy.Rate(10)
@@ -33,27 +33,29 @@ class CameraUserServer:
         return UserActionResponse(action=action)
 
     def set_next_action(self):
-        inp = raw_input("Press p or d: ").strip()
-        while inp not in ("p", "d"):
-            inp = raw_input("Unknown action {}. Press p or d: ".format(inp)).strip()
-        data_str = str(self._tracker.next()._avg)
-        x_coord = float(data_str.split(";")[0])
-        rospy.loginfo("x_coord=" + str(x_coord))
-        if x_coord < TH1:
-            direction = "L"
-        elif x_coord < TH2:
-            direction = "M"
-        else:
-            direction = "R"
-        if inp == "p": # Pick action
-            rospy.loginfo("Pick Action in coordinate:")
-            action = "pick" + direction
-        elif inp == "d":
-            rospy.loginfo("Drop Action in coordinate:")
-            action = "put" + direction
-        if action == "putM": # Invalid action
-            action = ""
-        self._next_action = action
+        inp = raw_input("Action: ")
+        self._next_action = inp
+        # inp = raw_input("Press p or d: ").strip()
+        # while inp not in ("p", "d"):
+            # inp = raw_input("Unknown action {}. Press p or d: ".format(inp)).strip()
+        # data_str = str(self._tracker.next()._avg)
+        # x_coord = float(data_str.split(";")[0])
+        # rospy.loginfo("x_coord=" + str(x_coord))
+        # if x_coord < TH1:
+            # direction = "L"
+        # elif x_coord < TH2:
+            # direction = "M"
+        # else:
+            # direction = "R"
+        # if inp == "p": # Pick action
+            # rospy.loginfo("Pick Action in coordinate:")
+            # action = "pick" + direction
+        # elif inp == "d":
+            # rospy.loginfo("Drop Action in coordinate:")
+            # action = "put" + direction
+        # if action == "putM": # Invalid action
+            # action = ""
+        # self._next_action = action
 
     def shutdown(self):
         self._tracker.close()

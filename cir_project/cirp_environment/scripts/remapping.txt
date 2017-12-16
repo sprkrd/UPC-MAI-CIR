@@ -1,0 +1,1 @@
+./environment_server.py pieces:=/segmenter_scene/pieces pick_or_place:=/iri_wam/iri_wam_generic_pickorplace/pick_or_place

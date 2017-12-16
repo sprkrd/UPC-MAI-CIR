@@ -161,7 +161,11 @@ class Environment:
 
 if __name__ == "__main__":
     env = Environment()
-    rospy.spin()
+    r = rospy.Rate(3)
+    while True:
+        print env.get_current_state()
+        r.sleep()
+    # rospy.spin()
     # rospy.sleep(rospy.Duration(1.0))
     # quit = False
     # while not quit:
