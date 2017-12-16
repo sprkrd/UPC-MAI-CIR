@@ -11,11 +11,33 @@ from cir_user.srv import UserAction, UserActionResponse
 TH1 = 1280*(1.0/3)
 TH2 = 1280*(2.0/3)
 
-def talker():
-    def service_callback(req):
+IP = "192.168.101.72"
+
+class CameraUserServer:
+
+    def __init__(self):
+        rospy.init_node("talker")
+        rospy.Service("poll_action", UserAction, self._action_cb)
+        self._next_action = None
+        self._tracker = EyeTribe()
+        self._tracker.connect(IP)
+        self._tracker.pullmode()
+
+    def _action_cb(self, req):
+        rate = rospy.Rate(10)
+        action = self._next_action
+        while action is None:
+            rate.sleep()
+            action = self._next_action
+            self._next_action = None
+        return UserActionResponse(action=action)
+
+    def set_next_action(self):
         inp = raw_input("Press p or d: ").strip()
         while inp not in ("p", "d"):
             inp = raw_input("Unknown action {}. Press p or d: ".format(inp)).strip()
+        data_str = str(self._tracker.next()._avg)
+        x_coord = float(data_str.split(";")[0])
         rospy.loginfo("x_coord=" + str(x_coord))
         if x_coord < TH1:
             direction = "L"
@@ -31,27 +53,19 @@ def talker():
             action = "put" + direction
         if action == "putM": # Invalid action
             action = ""
-        return UserActionResponse(action=action)
-    IP = "192.168.101.72"
-    x_coord = 0
-    rospy.init_node('talker', anonymous=True)
-    rospy.Service("poll_action", UserAction, service_callback)
-    # pub = rospy.Publisher('chatter', String, queue_size=10)
-    # rate = rospy.Rate(30) # 30hz (as the eyetribe)
+        self._next_action = action
 
-    tracker = EyeTribe()
-    tracker.connect(IP)
-    tracker.pullmode()
-
-    while not rospy.is_shutdown():
-        n = tracker.next()
-        data_str = str(n._avg)
-        x_coord = float(data_str.split(";")[0])
+    def shutdown(self):
+        self._tracker.close()
 
 if __name__ == '__main__':
     try:
-        talker()
+        user = CameraUserServer()
+        while True:
+            user.set_next_action()
     except rospy.ROSInterruptException:
-        tracker.pullmode()
-        tracker.close()
         pass
+    finally:
+        print "Shutting down server..."
+        user.shutdown()
+

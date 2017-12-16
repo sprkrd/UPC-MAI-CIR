@@ -3,6 +3,8 @@ import roslib
 import rospy
 import actionlib
 
+import os
+
 from math import pi
 from cirp_vision.msg import CirpDetectedPieces
 from iri_wam_generic_pickorplace.msg import PickOrPlaceAction, PickOrPlaceGoal
@@ -15,6 +17,12 @@ HELD = 3
 LAST_D = 4
 LAST_L = 5
 
+color_map = {
+        None: 0,
+        "red": 1,
+        "blue": 2,
+        "green": 3,
+}
 class EnvironmentError(Exception):
     pass
 
@@ -35,6 +43,7 @@ class Environment:
         self._last_r = None
         self._last_l = None
         rospy.Subscriber("pieces", CirpDetectedPieces, self._detected_cb)
+        rospy.Service("execute_action", CirpEnvironmentAction, self._action_cb)
 
     def _detected_cb(self, data):
         if not self._on_table:
@@ -52,6 +61,15 @@ class Environment:
             else:
                 on_table[position] = (color, [point.x, point.y, point.z])
         self._on_table = on_table
+
+    def _action_cb(self, req):
+        if req.action == "getCurrentState":
+            state = self.get_current_state()
+        else:
+            state = self.execute_action(req.action)
+        state = [color_map[color] for color in state]
+        resp = CirpEnvironmentActionResponse(state)
+        return resp
 
     def _pick(self, location):
         if self._on_table and self._on_table[location] is not None and self._holding is None:
@@ -110,6 +128,9 @@ class Environment:
                     self._last_r = color
         return self.get_current_state()
 
+    def _say(self, msg):
+        os.system('echo "{}" | festival --tts'.format(msg))
+
     def execute_action(self, action):
         if action == "pickL":
             return self._pick(LEFT)
@@ -121,6 +142,10 @@ class Environment:
             return self._put(LEFT)
         elif action == "putR":
             return self._put(RIGHT)
+        elif action.startswith("say"):
+            msg = action.split(' ', 1)[1]
+            self._say(msg)
+            return self.get_current_state()
         else:
             raise EnvironmentError("Unknown action: " + action)
 
@@ -136,32 +161,30 @@ class Environment:
 
 if __name__ == "__main__":
     env = Environment()
-    rospy.sleep(rospy.Duration(1.0))
-    # env.execute_action("pickM")
-    # env.execute_action("putL")
-    # env.execute_action("pickL")
-    # env.execute_action("putR")
-    # env.execute_action("pickR")
-    # env.execute_action("putR")
-    quit = False
-    while not quit:
-        cmd = int(raw_input("Select command: (1) query_state; "
-            "(2) pickL; (3) pickM; (4) pickR; (5) putL; (6) putR; (7) exit: "))
-        if cmd == 1:
-            print(env.get_current_state())
-        elif cmd == 2:
-            print(env.execute_action("pickL"))
-        elif cmd == 3:
-            print(env.execute_action("pickM"))
-        elif cmd == 4:
-            print(env.execute_action("pickR"))
-        elif cmd == 5:
-            print(env.execute_action("putL"))
-        elif cmd == 6:
-            print(env.execute_action("putR"))
-        elif cmd == 7:
-            print("Shutting down...")
-            quit = True
-        else:
-            rospy.logerr("Unknown cmd: " + str(cmd))
+    rospy.spin()
+    # rospy.sleep(rospy.Duration(1.0))
+    # quit = False
+    # while not quit:
+        # cmd = int(raw_input("Select command: (1) query_state; "
+            # "(2) pickL; (3) pickM; (4) pickR; (5) putL; (6) putR; (7) say; (8) exit: "))
+        # if cmd == 1:
+            # print(env.get_current_state())
+        # elif cmd == 2:
+            # print(env.execute_action("pickL"))
+        # elif cmd == 3:
+            # print(env.execute_action("pickM"))
+        # elif cmd == 4:
+            # print(env.execute_action("pickR"))
+        # elif cmd == 5:
+            # print(env.execute_action("putL"))
+        # elif cmd == 6:
+            # print(env.execute_action("putR"))
+        # elif cmd == 7:
+            # msg = raw_input("Enter message: ")
+            # env.execute_action("say {}".format(msg))
+        # elif cmd == 8:
+            # print("Shutting down...")
+            # quit = True
+        # else:
+            # rospy.logerr("Unknown cmd: " + str(cmd))
 

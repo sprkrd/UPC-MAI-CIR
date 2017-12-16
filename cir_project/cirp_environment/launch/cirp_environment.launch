@@ -1,0 +1,7 @@
+<launch>
+  <!--<node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>-->
+  <node name="environment" pkg="cirp_environment" type="environment_server.py">
+    <remap from="pieces" to="/segmenter_scene/pieces"/>
+    <remap from="pick_or_place" to="/iri_wam/iri_wam_generic_pickorplace/pick_or_place"/>
+  </node>
+</launch>

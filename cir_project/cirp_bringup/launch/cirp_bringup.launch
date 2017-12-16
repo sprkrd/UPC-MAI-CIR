@@ -20,4 +20,6 @@
     <arg name="transform_points" value="true" />
   </include>
 
+  <!--<include file="$(find cirp_environment)/launch/cirp_environment.launch"/>-->
+
 </launch>
