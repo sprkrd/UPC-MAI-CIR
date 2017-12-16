@@ -80,8 +80,13 @@
     <!-- Fix camera link to parent according to calibration transform.
          Alternatively, we could remove this joint from here and put it at
          the main .urdf.xacro file. -->
+    <!--<joint name="${prefix}_joint" type="fixed">-->
+      <!--<origin xyz="0.9014760 -0.0594 0.7251720" rpy="0.20236 1.4462 -3.0179" />-->
+      <!--<parent link="${parent}"/>-->
+      <!--<child link="${prefix}_link"/>-->
+    <!--</joint>  -->
     <joint name="${prefix}_joint" type="fixed">
-      <origin xyz="0.9014760 -0.0594 0.7251720" rpy="0.20236 1.4462 -3.0179" />
+      <origin xyz="0.540 -0.060 0.736" rpy="0 1.490 3.142" />
       <parent link="${parent}"/>
       <child link="${prefix}_link"/>
     </joint>  

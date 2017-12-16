@@ -121,7 +121,7 @@ void CirpVisionAlgNode::mainNodeThread(void)
 /*  [subscriber callbacks] */
 void CirpVisionAlgNode::points_callback(const PointCloud::ConstPtr& msg)
 {
-  ROS_INFO("CirpVisionAlgNode::points_callback: New Message Received");
+  //ROS_INFO("CirpVisionAlgNode::points_callback: New Message Received");
 
   //use appropiate mutex to shared variables if necessary
   this->alg_.lock();
@@ -147,7 +147,7 @@ void CirpVisionAlgNode::points_mutex_exit(void)
 
 void CirpVisionAlgNode::img_in_callback(const sensor_msgs::Image::ConstPtr& msg)
 {
-  ROS_INFO("CirpVisionAlgNode::img_in_callback: New Message Received");
+  //ROS_INFO("CirpVisionAlgNode::img_in_callback: New Message Received");
 
   //use appropiate mutex to shared variables if necessary
   this->alg_.lock();

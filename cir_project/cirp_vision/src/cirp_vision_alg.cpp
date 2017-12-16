@@ -61,8 +61,8 @@ void CirpVisionAlgorithm::config_update(Config& config, uint32_t level)
         config_.blue_v));
   segmenter_.set_color("green", cv::Vec3b(config_.green_h, config_.green_s,
         config_.green_v));
-  segmenter_.set_color("yellow", cv::Vec3b(config_.yellow_h, config_.yellow_s,
-        config_.yellow_v));
+  //segmenter_.set_color("yellow", cv::Vec3b(config_.yellow_h, config_.yellow_s,
+        //config_.yellow_v));
 
   this->unlock();
 }

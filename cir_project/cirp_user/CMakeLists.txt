@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(cirp_gazebo)
+project(cirp_user)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -7,10 +7,7 @@ project(cirp_gazebo)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-#find_package(catkin REQUIRED COMPONENTS
-  #gazebo_ros
-  #gz_gripper_plugin
-#)
+find_package(catkin REQUIRED message_generation std_msgs)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -53,11 +50,10 @@ project(cirp_gazebo)
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+ add_service_files(
+   FILES
+   UserAction.srv
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -67,10 +63,10 @@ project(cirp_gazebo)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs  # Or other packages containing msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -103,8 +99,8 @@ project(cirp_gazebo)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES cirp_gazebo
-  CATKIN_DEPENDS gazebo_ros gz_gripper_plugin
+#  LIBRARIES cir_tet
+  CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 
@@ -116,12 +112,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  ${catkin_INCLUDE_DIRS}
+# ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/cirp_gazebo.cpp
+#   src/${PROJECT_NAME}/cir_tet.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -132,7 +128,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/cirp_gazebo_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/cir_tet_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -189,7 +185,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_cirp_gazebo.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_cir_tet.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
