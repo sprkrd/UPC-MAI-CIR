@@ -48,7 +48,7 @@ def reward_estimate_from_trajectory(trajectory):
 
 
 print('Getting state action values from optimal policy with some random exploration')
-# Q = train_Q(iterations=200000, traj_len=100, alpha_min=0.5)
+Q = train_Q(iterations=200, traj_len=100, alpha_min=0.5)
 # print(Q[1, 2, 3, 0, :, 0, :])
 # np.save('Qs', np.copy(Q))
 Q = np.load('Qs.npy')
@@ -66,7 +66,7 @@ env = Environment()
 env.reset()
 user = User(env)
 
-env.warn('Welcome!')
+env.warn('Welcome! Have fun playing.')
 
 
 current_state = env.get_current_state()
